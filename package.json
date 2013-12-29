@@ -1,0 +1,25 @@
+{
+  "name": "gifmorphia",
+  "version": "0.0.0",
+  "description": "Art project to do crazy things to animated gifs",
+  "main": "gifmorphia.js",
+  "dependencies": {
+    "st": "~0.2.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/makenai/gifmorphia.git"
+  },
+  "keywords": [
+    "animated",
+    "gif"
+  ],
+  "author": "Pawel Szymczykowski <makenai@gmail.com> (http://makenai.net/)",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/makenai/gifmorphia/issues"
+  }
+}
