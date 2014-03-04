@@ -4,14 +4,21 @@ var http       = require('http')
   , url        = require('url')
   , omggif     = require('./lib/omggif')
 
-function GifMorphia() {
- 
+var gifList = [
+  'gifs/party.gif',
+  'gifs/trek.gif',
+  'gifs/pizza3.gif'
+]
+
+function GifMorphia() { 
+
   this.server = http.createServer( function(req, res) {
     this.handler(req, res)
   }.bind(this))
 
   this.server.listen(8080)
   console.log('Listening on http://localhost:8080')
+
 }
 
 GifMorphia.prototype = {
@@ -23,14 +30,21 @@ GifMorphia.prototype = {
       index: 'index.html',
       path: __dirname + '/static',
     })
-    if ( req.url.indexOf('/gif') == 0 )
+
+    if ( req.url.indexOf('/image') == 0 )
       return this.handle_gif(req, res)
+
+    if ( req.url.indexOf('/swap') == 0 ) {
+      gifList.push( gifList.splice(0,1)[0] )
+      return res.end('OK')
+    }
+      
     mount(req, res);
   },
 
   handle_gif: function( req, res ) {
 
-    var in_buffer = fs.readFileSync('gifs/pizza3.gif'),
+    var in_buffer = fs.readFileSync( gifList[0] ),
       gr = new omggif.GifReader(in_buffer),
       frames = gr.numFrames(),
       out_buffer = new Buffer( in_buffer.length + 1024 ), // account for extra space after messing up LZW ratio with shifts
@@ -39,14 +53,8 @@ GifMorphia.prototype = {
     // TODO handle local and global palettes correctly
     var frame = gr.getFrame(1)
 
-    if ( colorShift = parsed.query['a'] ) {
+    if ( colorShift = parsed.query['z'] ) {
       frame.palette = frame.palette.concat( frame.palette.splice(0,colorShift) );
-    }
-
-    // TODO get default delay
-    var delay = 0;
-    if ( delayFactor = parsed.query['x'] ) {
-      delay = delayFactor;
     }
  
     var gf = new omggif.GifWriter(out_buffer, gr.width, gr.height, { palette: frame.palette, loop: 0 });
@@ -54,11 +62,11 @@ GifMorphia.prototype = {
       frame = gr.getFrame(i)
 
       // TODO fix lockup bug on pizza.gif
-      if ( pixelShift = parsed.query['b'] ) {
+      if ( pixelShift = parsed.query['x'] ) {
         frame.pixels = frame.pixels.concat( frame.pixels.splice(0,pixelShift) );
       }
 
-      gf.addFrame( frame.x, frame.y, frame.width, frame.height, frame.pixels, { delay: delay });   
+      gf.addFrame( frame.x, frame.y, frame.width, frame.height, frame.pixels, {} );   
     }
    
     res.writeHead(200, {'Content-Type': 'image/gif'})

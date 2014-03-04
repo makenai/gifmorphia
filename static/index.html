@@ -2,34 +2,23 @@
 <head>
   <title>GifMorphia</title>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-  <style>
-    body { font-family: sans-serf; }
-    #variables input { font-size: 36px; width: 180px; }
-    #variables label { font-size: 42px; color: green; margin-left: 20px; }
-
-  </style>
+  <script src="//js.leapmotion.com/leap-0.4.1.js"></script>
+  <script src="gifmorphia-client.js"></script>
+  <link rel="stylesheet" type="text/css" href="gifmorphia.css">
 </head>
 <body>
-  <h1>GifMorphia and stuff.</h1>
-  <img id="gif" src="/gif">
+  <img id="gif" src="/image">
   <p>
     <form id="variables">
-      <label for="a">a:</label> <input type="number" name="a" id="a" value="0"/>
-      <label for="b">b:</label> <input type="number" name="b" id="b" step="15" value="0"/>
-      <label for="x">x:</label> <input type="number" name="x" id="x" step="5" value="0"/>
+      <label for="x">x:</label> <input type="number" name="x" id="x" value="0"/>
       <label for="y">y:</label> <input type="number" name="y" id="y" value="0"/>
       <label for="z">z:</label> <input type="number" name="z" id="z" value="0"/>
     </form>
+    <div id="graphs">
+      <div id="xGraph">x</div>
+      <div id="yGraph">y</div>
+      <div id="zGraph">z</div>
+    </div>
   </p>
-  <script type="text/javascript">
-    $( document ).ready(function() {
-      $('#variables').on('change', 'input', function(e) {
-        e.preventDefault();
-        var queryString = 'a=' + $('#a').val() + '&b=' + $('#b').val() + '&x=' + $('#x').val()+ '&y=' + $('#y').val()+ '&z=' + $('#z').val();
-        console.log( queryString );
-        $('#gif').attr('src', '/gif?' + queryString);
-      });
-    });
-  </script>
 </body>
 </html>
